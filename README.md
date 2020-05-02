@@ -6,4 +6,4 @@ Requirements : RStudio and R base package
 Steps:
 1) git clone https://github.com/huynhtran001/math345_rstudio
 2) Open up RStudio and add the new directory
-3) Load up the script and run it!
+3) Load up the script (rscript.r) and run it!
