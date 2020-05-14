@@ -73,4 +73,59 @@ asiaPie = pieSetup(dataFrame = asiaFrame, title = "Asia")
 chinaFrame = createFrame(path = "genres-china.csv")
 chinaPie = pieSetup(dataFrame = chinaFrame, title = "China")
 
+# -------------------------------------------------
+# Section for regression
+install.packages("corrplot")
+library(corrplot)
+
+removeTitles = function(dataFrame) {
+  dataFrame = dataFrame[,-1]
+  dataFrame = dataFrame[, -3]
+  return(dataFrame)
+}
+
+makeRegression = function(dataFrame, title) {
+  reg <- lm(best_movie_ratings ~ best_revenue, data=dataFrame)
+  plot(dataFrame$best_revenue, dataFrame$best_movie_ratings, pch=19,
+       xlab = "Revenue (in millions)", ylab = "Rating (out of 10)",
+       main = title)
+  grid()
+  abline(reg, col="red", lwd=1.5)
+}
+
+# Scales column down by value
+scaleDown = function(dataFrame, value) {
+  dataFrame[,2] = dataFrame[, 2] / value
+  return(dataFrame)
+}
+
+myCor = function(dataFrame, title) {
+  corrplot(cor(dataFrame),
+           method="number",
+           type = "upper",
+           title = title)
+}
+
+europe_reg = read.csv("europe_revenue.csv")
+europe_reg = removeTitles(dataFrame = europe_reg)
+europe_reg = scaleDown(dataFrame = europe_reg, value = 1000000)
+
+latin_reg = read.csv("latin_revenue.csv")
+latin_reg = removeTitles(dataFrame = latin_reg)
+latin_reg = scaleDown(dataFrame = latin_reg, value = 1000000)
+
+asia_reg = read.csv("asia_revenue.csv")
+asia_reg = removeTitles(dataFrame = asia_reg)
+asia_reg = scaleDown(dataFrame = asia_reg, value = 1000000)
+
+china_reg = read.csv("china_revenue.csv")
+china_reg = removeTitles(dataFrame = china_reg)
+china_reg = scaleDown(dataFrame = china_reg, value = 1000000)
+
+#myCor(europe_reg, "Europe")
+#myCor(asia_reg, "Asia Pacific")
+#myCor(china_reg, "China")
+#myCor(latin_reg, "Latin America")
+
 print("Welcome! If you'd like to generate the graphs, please call the following variable names: revenueGraph, europePie, latinPie, asiaPie, or chinaPie")
+print("If you want to see the regression of a dataset, call the function makeRegression and pass it a data frame and title")
